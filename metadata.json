@@ -1,0 +1,6 @@
+{
+  "name": "Signal Hackers CSB - Enterprise Toolkit Pro v5.0",
+  "description": "High-powered cybersecurity reporting command center, dual variable target injection, legal takedown appeals, and cyber defense utilities.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

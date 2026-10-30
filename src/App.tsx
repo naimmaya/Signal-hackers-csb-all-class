@@ -33,6 +33,7 @@ import { AdminModal } from './components/AdminModal';
 import { SupportHubModal } from './components/SupportHubModal';
 import { PWAInstallButton } from './components/PWAInstallButton';
 import { CopyHistoryItem } from './utils/textEngine';
+import { safeStorage } from './utils/safeStorage';
 import {
   initAudio,
   playCyberSound,
@@ -44,20 +45,20 @@ export default function App() {
   // Authentication State
   const [user, setUser] = useState<UserSession | null>(() => {
     try {
-      const stored = localStorage.getItem('csb_user_session');
+      const stored = safeStorage.getItem('csb_user_session');
       return stored ? JSON.parse(stored) : null;
     } catch {
       return null;
     }
   });
-  const [isAuthOpen, setIsAuthOpen] = useState(() => !Boolean(localStorage.getItem('csb_user_session')));
+  const [isAuthOpen, setIsAuthOpen] = useState(() => !Boolean(safeStorage.getItem('csb_user_session')));
 
   // Variable Injection State
   const [targetUrl, setTargetUrl] = useState(() => {
-    return localStorage.getItem('csb_last_target') || '';
+    return safeStorage.getItem('csb_last_target') || '';
   });
   const [victimUrl, setVictimUrl] = useState(() => {
-    return localStorage.getItem('csb_last_victim') || '';
+    return safeStorage.getItem('csb_last_victim') || '';
   });
 
   // Sound FX State
@@ -79,7 +80,7 @@ export default function App() {
   // Pinned items
   const [pinnedIds, setPinnedIds] = useState<string[]>(() => {
     try {
-      const saved = localStorage.getItem('csb_pinned_reports');
+      const saved = safeStorage.getItem('csb_pinned_reports');
       return saved ? JSON.parse(saved) : ['class_14', 'class_20', 'class_29', 'class_35'];
     } catch {
       return ['class_14', 'class_20', 'class_29', 'class_35'];
@@ -89,7 +90,7 @@ export default function App() {
   // Custom Reports (added via Admin)
   const [customReports, setCustomReports] = useState<ReportItem[]>(() => {
     try {
-      const saved = localStorage.getItem('csb_custom_reports_v5');
+      const saved = safeStorage.getItem('csb_custom_reports_v5');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -99,35 +100,35 @@ export default function App() {
   // Copy History
   const [copyHistory, setCopyHistory] = useState<CopyHistoryItem[]>(() => {
     try {
-      const saved = localStorage.getItem('csb_copy_history');
+      const saved = safeStorage.getItem('csb_copy_history');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
     }
   });
 
-  // Keep targets in localStorage
+  // Keep targets in safeStorage
   useEffect(() => {
-    localStorage.setItem('csb_last_target', targetUrl);
+    safeStorage.setItem('csb_last_target', targetUrl);
   }, [targetUrl]);
 
   useEffect(() => {
-    localStorage.setItem('csb_last_victim', victimUrl);
+    safeStorage.setItem('csb_last_victim', victimUrl);
   }, [victimUrl]);
 
-  // Keep pinned reports in localStorage
+  // Keep pinned reports in safeStorage
   useEffect(() => {
-    localStorage.setItem('csb_pinned_reports', JSON.stringify(pinnedIds));
+    safeStorage.setItem('csb_pinned_reports', JSON.stringify(pinnedIds));
   }, [pinnedIds]);
 
-  // Keep custom reports in localStorage
+  // Keep custom reports in safeStorage
   useEffect(() => {
-    localStorage.setItem('csb_custom_reports_v5', JSON.stringify(customReports));
+    safeStorage.setItem('csb_custom_reports_v5', JSON.stringify(customReports));
   }, [customReports]);
 
-  // Keep copy history in localStorage
+  // Keep copy history in safeStorage
   useEffect(() => {
-    localStorage.setItem('csb_copy_history', JSON.stringify(copyHistory));
+    safeStorage.setItem('csb_copy_history', JSON.stringify(copyHistory));
   }, [copyHistory]);
 
   // Keyboard shortcut: Ctrl + Shift + A for Secret Admin
@@ -194,11 +195,11 @@ export default function App() {
   const handleResetToDefaults = () => {
     setCustomReports([]);
     setPinnedIds(['class_14', 'class_20', 'class_29', 'class_35']);
-    localStorage.removeItem('csb_custom_reports_v5');
+    safeStorage.removeItem('csb_custom_reports_v5');
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('csb_user_session');
+    safeStorage.removeItem('csb_user_session');
     setUser(null);
     setIsAuthOpen(true);
   };

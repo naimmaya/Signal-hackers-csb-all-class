@@ -11,20 +11,28 @@ export function usePWAInstall() {
   const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
-    // Detect standalone mode (already installed and running as standalone app)
-    const isStandalone =
-      window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator as unknown as { standalone?: boolean }).standalone === true;
-    setIsInstalled(isStandalone);
+    try {
+      if (typeof window !== 'undefined') {
+        const isStandalone =
+          (typeof window.matchMedia === 'function' && window.matchMedia('(display-mode: standalone)')?.matches) ||
+          Boolean((window.navigator as unknown as { standalone?: boolean })?.standalone);
+        setIsInstalled(Boolean(isStandalone));
 
-    // Detect iOS devices
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const isIOSDevice = /iphone|ipad|ipod/.test(userAgent);
-    setIsIOS(isIOSDevice);
+        const userAgent = (window.navigator?.userAgent || '').toLowerCase();
+        const isIOSDevice = /iphone|ipad|ipod/.test(userAgent);
+        setIsIOS(isIOSDevice);
+      }
+    } catch (e) {
+      console.warn('[PWA] Error detecting standalone/iOS:', e);
+    }
 
     const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      try {
+        e.preventDefault();
+        setDeferredPrompt(e as BeforeInstallPromptEvent);
+      } catch (err) {
+        console.warn('[PWA] beforeinstallprompt handling error:', err);
+      }
     };
 
     const handleAppInstalled = () => {
@@ -32,23 +40,35 @@ export function usePWAInstall() {
       setDeferredPrompt(null);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    window.addEventListener('appinstalled', handleAppInstalled);
+    try {
+      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.addEventListener('appinstalled', handleAppInstalled);
+    } catch (e) {
+      console.warn('[PWA] Failed to attach install listeners:', e);
+    }
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      window.removeEventListener('appinstalled', handleAppInstalled);
+      try {
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+        window.removeEventListener('appinstalled', handleAppInstalled);
+      } catch {
+        // Ignore on teardown
+      }
     };
   }, []);
 
   const install = async () => {
     if (!deferredPrompt) return false;
-    await deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      setIsInstalled(true);
-      setDeferredPrompt(null);
-      return true;
+    try {
+      await deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setIsInstalled(true);
+        setDeferredPrompt(null);
+        return true;
+      }
+    } catch (e) {
+      console.warn('[PWA] Install prompt failed:', e);
     }
     return false;
   };

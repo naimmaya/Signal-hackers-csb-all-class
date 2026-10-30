@@ -11,7 +11,7 @@ export default defineConfig(() => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['/assets/aistudio/file_0000000084b881f485286a78bbfab9eb_d9989093.png'],
+        includeAssets: ['assets/aistudio/file_0000000084b881f485286a78bbfab9eb_d9989093.png'],
         manifest: {
           id: '/',
           name: 'Signal Hackers CSB - Enterprise Toolkit Pro v5.0',
@@ -46,20 +46,17 @@ export default defineConfig(() => {
         },
         devOptions: {
           enabled: true,
-          type: 'module',
         },
       }),
     ],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
+        '@': path.resolve('.'),
       },
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modify—file watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
-      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
   };

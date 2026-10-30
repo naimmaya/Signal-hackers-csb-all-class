@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShieldCheck, Lock, Mail, Phone, ArrowRight, UserCheck, KeyRound, AlertTriangle } from 'lucide-react';
 import { playCyberSound } from '../utils/sound';
+import { safeStorage } from '../utils/safeStorage';
 
 export interface UserSession {
   emailOrPhone: string;
@@ -54,7 +55,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       loginTime: new Date().toLocaleTimeString(),
     };
 
-    localStorage.setItem('csb_user_session', JSON.stringify(session));
+    safeStorage.setItem('csb_user_session', JSON.stringify(session));
     onLoginSuccess(session);
   };
 

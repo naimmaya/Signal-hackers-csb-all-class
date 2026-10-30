@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="bn" class="dark">
+<html lang="bn" class="dark" style="background-color: #05090e; color-scheme: dark;">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,14 +16,20 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="CSB Toolkit" />
-    <link rel="apple-touch-icon" href="/assets/aistudio/file_0000000084b881f485286a78bbfab9eb_d9989093.png" />
     <link rel="icon" type="image/png" href="/assets/aistudio/file_0000000084b881f485286a78bbfab9eb_d9989093.png" />
+    <link rel="apple-touch-icon" href="/assets/aistudio/file_0000000084b881f485286a78bbfab9eb_d9989093.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Hind+Siliguri:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
   </head>
-  <body class="bg-[#05090e] text-slate-100 antialiased selection:bg-emerald-500 selection:text-black">
-    <div id="root"></div>
+  <body style="background-color: #05090e; color: #f1f5f9; margin: 0; padding: 0;" class="bg-[#05090e] text-slate-100 antialiased selection:bg-emerald-500 selection:text-black">
+    <div id="root">
+      <div style="min-height: 100vh; background-color: #05090e; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: 'Fira Code', monospace; color: #10b981;">
+        <div style="width: 52px; height: 52px; border: 3px solid rgba(16, 185, 129, 0.2); border-top-color: #10b981; border-radius: 50%; animation: csbSpin 0.75s linear infinite;"></div>
+        <p style="margin-top: 18px; font-size: 13px; letter-spacing: 2px; font-weight: bold; text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);">SIGNAL HACKERS CSB INITIALIZING...</p>
+        <style>@keyframes csbSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
